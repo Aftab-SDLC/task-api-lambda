@@ -1,0 +1,33 @@
+{
+  "name": "task-api-lambda",
+  "version": "1.0.0",
+  "description": "Task Management API with AWS Lambda",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "deploy:dev": "serverless deploy --stage dev --verbose",
+    "deploy:prod": "serverless deploy --stage prod --verbose",
+    "local": "serverless offline start",
+    "test": "echo \"Tests coming soon\" && exit 0",
+    "logs": "serverless logs -f createTask -t",
+    "remove:dev": "serverless remove --stage dev",
+    "remove:prod": "serverless remove --stage prod",
+    "clean": "rimraf dist .esbuild .serverless"
+  },
+  "keywords": ["lambda", "serverless", "typescript", "mongodb"],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "mongodb": "^6.3.0"
+  },
+  "devDependencies": {
+    "@types/aws-lambda": "^8.10.130",
+    "@types/node": "^20.10.0",
+    "esbuild": "^0.19.0",
+    "serverless": "^3.38.0",
+    "serverless-dotenv-plugin": "^6.0.0",
+    "serverless-esbuild": "^1.52.0",
+    "serverless-offline": "^13.3.0",
+    "typescript": "^5.3.3"
+  }
+}
