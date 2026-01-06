@@ -62,7 +62,7 @@ functions:
           cors: true
   
   deleteTask:
-    handler: src/handlers/tasks.delete
+    handler: src/handlers/tasks.deleteTask
     events:
       - http:
           path: /tasks/{id}

@@ -26,6 +26,18 @@ export async function create(
       return error('Title is required', 400);
     }
 
+    if (input.status && !['pending', 'in-progress', 'completed'].includes(input.status)) {
+      return error('Invalid status. Must be pending, in-progress, or completed', 400);
+    }
+
+    if (input.priority && !['low', 'medium', 'high'].includes(input.priority)) {
+      return error('Invalid priority. Must be low, medium, or high', 400);
+    }
+
+    if (input.dueDate && isNaN(Date.parse(input.dueDate))) {
+      return error('Invalid dueDate', 400);
+    }
+
     const task: ITask = {
       title: input.title,
       description: input.description || '',
@@ -63,7 +75,7 @@ export async function getAll(
 
     const status = event.queryStringParameters?.status;
     const priority = event.queryStringParameters?.priority;
-    
+
     const filter: any = {};
     if (status) filter.status = status;
     if (priority) filter.priority = priority;
@@ -142,9 +154,26 @@ export async function update(
 
     if (updates.title !== undefined) updateDoc.title = updates.title;
     if (updates.description !== undefined) updateDoc.description = updates.description;
-    if (updates.status !== undefined) updateDoc.status = updates.status;
-    if (updates.priority !== undefined) updateDoc.priority = updates.priority;
-    if (updates.dueDate !== undefined) updateDoc.dueDate = new Date(updates.dueDate);
+    if (updates.status !== undefined) {
+      if (!['pending', 'in-progress', 'completed'].includes(updates.status)) {
+        return error('Invalid status', 400);
+      }
+      updateDoc.status = updates.status;
+    }
+
+    if (updates.priority !== undefined) {
+      if (!['low', 'medium', 'high'].includes(updates.priority)) {
+        return error('Invalid priority', 400);
+      }
+      updateDoc.priority = updates.priority;
+    }
+
+    if (updates.dueDate !== undefined) {
+      if (isNaN(Date.parse(updates.dueDate))) {
+        return error('Invalid dueDate', 400);
+      }
+      updateDoc.dueDate = new Date(updates.dueDate);
+    }
 
     const result = await tasksCollection.findOneAndUpdate(
       { _id: new ObjectId(id) },
